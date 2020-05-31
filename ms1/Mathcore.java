@@ -70,8 +70,8 @@ public class Mathcore {
         return result;
     }
     public static BigDecimal sub(BigDecimal x, BigDecimal y) {
-        BigDecimal result = x;
-        result = result.subtract(y, mc);
+        BigDecimal result = y;
+        result = result.subtract(x, mc);
         return result;
     }
     public static BigDecimal mul(BigDecimal x, BigDecimal y) {
@@ -81,7 +81,7 @@ public class Mathcore {
     }
     public static BigDecimal div(BigDecimal x, BigDecimal y) throws ArithmeticException {
         if (y.equals(new BigDecimal(0))) throw new ArithmeticException("Division by zero");
-        BigDecimal divide = x.divide(y, mc);
+        BigDecimal divide = y.divide(x, mc);
         return divide;
     }
     public static BigDecimal fak(BigDecimal x) throws ArithmeticException, FakException {

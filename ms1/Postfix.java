@@ -6,7 +6,7 @@ import ms0.a0.Stack;
 import static ms1.Mathcore.*;
 
 public class Postfix {
-    String[] tokens = new String[0];
+
     static Stack stack = new Stack();
 
     public static String eval(String eingabe) throws Exception {
@@ -14,7 +14,11 @@ public class Postfix {
         while (!tok.done()) {
             String s = tok.next();
             if ('0' <= s.charAt(0) && s.charAt(0) <= '9') {
-                stack.push((new BigDecimal (s, mc)).toString());
+                stack.push((new BigDecimal(s, mc)).toString());
+            } else if (s.equals("e")) {
+                stack.push((new BigDecimal(E, mc)).toString());
+            } else if (s.equals("pi")) {
+                stack.push((new BigDecimal(PI, mc)).toString());
             } else if (s.equals("+")) {
                 stack.push(add(new BigDecimal(stack.pop()), new BigDecimal(stack.pop())).toString());
             } else if (s.equals("-")) {
