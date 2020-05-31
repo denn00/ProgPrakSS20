@@ -45,7 +45,7 @@ public class GUI implements ActionListener,ListSelectionListener,FocusListener {
         public void actionPerformed(ActionEvent e) {
         String result = null;
         try {
-            result =Postfix.eval(input.getText());
+            result=Postfix.eval(input.getText());
             } catch (Exception ex) {
             status.setText(ex.getMessage());
             }

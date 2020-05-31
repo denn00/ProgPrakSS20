@@ -1,6 +1,8 @@
 package ms1;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
@@ -62,38 +64,52 @@ public class Mathcore {
             "52111513683506275260232648472870392076431005958411661205452970302364725492966693" +
             "81151373227536450988890313602057248176585118063036442812314965507047510254465011" +
             "727211555194866850800368532281831521960037356252794495158284188294787610852639814";
-        public static BigDecimal add(BigDecimal x, BigDecimal y) {
-            BigDecimal result = x;
-            result = result.add(y, mc);
-            return result;
+    public static BigDecimal add(BigDecimal x, BigDecimal y) {
+        BigDecimal result = x;
+        result = result.add(y, mc);
+        return result;
+    }
+    public static BigDecimal sub(BigDecimal x, BigDecimal y) {
+        BigDecimal result = x;
+        result = result.subtract(y, mc);
+        return result;
+    }
+    public static BigDecimal mul(BigDecimal x, BigDecimal y) {
+        BigDecimal result = x;
+        result = result.multiply(y, mc);
+        return result;
+    }
+    public static BigDecimal div(BigDecimal x, BigDecimal y) throws ArithmeticException {
+        if (y.equals(new BigDecimal(0))) throw new ArithmeticException("Division by zero");
+        BigDecimal divide = x.divide(y, mc);
+        return divide;
+    }
+    public static BigDecimal fak(BigDecimal x) throws ArithmeticException, FakException {
+        try {
+            int f = x.intValueExact();
+            if (f<0) throw new FakException("Error");
+        } catch (ArithmeticException ex){
+            throw new ArithmeticException("Invalid argument");
         }
-        public static BigDecimal sub(BigDecimal x, BigDecimal y) {
-            BigDecimal result = x;
-            result = result.subtract(y, mc);
-            return new BigDecimal(String.valueOf(result), mc_out);
+
+        BigDecimal result = new BigDecimal(1);
+        if (x.equals(new BigDecimal(0))){
+            return new BigDecimal(1);
         }
-        public static BigDecimal mul(BigDecimal x, BigDecimal y) {
-            BigDecimal result = x;
-            result = result.multiply(y, mc);
-            return new BigDecimal(String.valueOf(result), mc_out);
+        for (int i =1 ; i<=x.intValue(); i++){
+            result = mul(result, new BigDecimal(i));
         }
-        public static BigDecimal div(BigDecimal x, BigDecimal y) throws ArithmeticException {
-            BigDecimal result = x;
-            ArithmeticException myException = new ArithmeticException();
-            if (y.equals(0)) throw myException;
-            result.divide(y, mc);
-            return new BigDecimal(String.valueOf(result), mc_out);
+        return result;
+    }
+    public static class FakException extends Exception {
+        private String errorMessage;
+        public FakException(String errorMessage) {
+            this.errorMessage=errorMessage;
         }
-        public static BigDecimal fak(BigDecimal x) throws ArithmeticException {
-            BigDecimal result = new BigDecimal(1);
-            if (x.intValue()<0) throw new ArithmeticException();
-            if (x.equals(0)){
-                return new BigDecimal(1);
-            }
-            for (int i =1 ; i<=x.intValue(); i++){
-                result = mul(result, new BigDecimal(i));
-            }
-            return result;
+        @Override
+        public String getMessage(){
+            return errorMessage;
+        }
     }
 }
 
