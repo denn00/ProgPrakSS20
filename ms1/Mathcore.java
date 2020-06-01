@@ -1,8 +1,7 @@
 package ms1;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+
 import java.math.MathContext;
 import java.math.RoundingMode;
 
@@ -80,26 +79,45 @@ public class Mathcore {
         return result;
     }
     public static BigDecimal div(BigDecimal x, BigDecimal y) throws ArithmeticException {
-        if (y.equals(new BigDecimal(0))) throw new ArithmeticException("Division by zero");
+        if (y.compareTo(BigDecimal.ZERO)==0) throw new ArithmeticException("Division by zero");
         BigDecimal divide = y.divide(x, mc);
         return divide;
     }
-    public static BigDecimal fak(BigDecimal x) throws ArithmeticException, FakException {
+    public static BigDecimal fak(BigDecimal x) throws ArithmeticException {
+        if (x.compareTo(BigDecimal.ZERO) < 0)
+            throw new ArithmeticException("Cannot take fak of negative ");
         try {
             int f = x.intValueExact();
-            if (f<0) throw new FakException("Error");
         } catch (ArithmeticException ex){
             throw new ArithmeticException("Invalid argument");
         }
-
-        BigDecimal result = new BigDecimal(1);
-        if (x.equals(new BigDecimal(0))){
-            return new BigDecimal(1);
-        }
-        for (int i =1 ; i<=x.intValue(); i++){
+        BigDecimal result = BigDecimal.ONE;
+        for (int i =1 ; i<=x.intValueExact(); i++){
             result = mul(result, new BigDecimal(i));
         }
         return result;
+    }
+    public static BigDecimal exp(BigDecimal x){
+        int f =0;
+        while ((x.abs()).compareTo(BigDecimal.TEN.pow(f,mc))<0){
+            f=f+1;
+        }
+        int b=f;
+        BigDecimal a= new BigDecimal(String.valueOf(x.divide(BigDecimal.TEN.pow(b,mc))));
+        BigDecimal r= BigDecimal.ZERO;
+        BigDecimal k= BigDecimal.ZERO;
+        while (new BigDecimal(E,mc).divide(fak(k.add(BigDecimal.ONE)),mc).compareTo(epsilon)>=0){
+            r=r.add((a.pow(f,mc)).divide(fak(k),mc),mc);
+            k=k.add(BigDecimal.ONE,mc);
+            f=f+1;
+        }
+        while (b>0){
+            for (int i=0; i<10; i++){
+                r=r.multiply(r,mc);
+            }
+            b=b-1;
+        }
+        return r;
     }
     public static class FakException extends Exception {
         private String errorMessage;
@@ -111,5 +129,6 @@ public class Mathcore {
             return errorMessage;
         }
     }
+
 }
 

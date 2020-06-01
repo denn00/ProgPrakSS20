@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import ms0.a1.Tokenizer;
 import ms0.a0.Stack;
 import static ms1.Mathcore.*;
+import java.lang.Exception;
 
 public class Postfix {
 
@@ -34,11 +35,11 @@ public class Postfix {
             } else if (s.equals("!")) {
                 try {
                     stack.push(fak(new BigDecimal(stack.pop())).toString());
-                } catch (ArithmeticException e) {
+                } catch (Exception e) {
                     return e.getMessage();
-                } catch (FakException f) {
-                    return f.getMessage();
                 }
+            }else if (s.equals("exp")){
+                stack.push(exp(new BigDecimal(stack.pop())).toString());
             }
         }
         return (new BigDecimal(stack.pop()).round(mc_out)).toString();
