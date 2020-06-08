@@ -1,7 +1,6 @@
 package ms1;
 
 import java.math.BigDecimal;
-
 import java.math.MathContext;
 import java.math.RoundingMode;
 
@@ -85,7 +84,7 @@ public class Mathcore {
     }
     public static BigDecimal fak(BigDecimal x) throws ArithmeticException {
         if (x.compareTo(BigDecimal.ZERO) < 0)
-            throw new ArithmeticException("Cannot take fak of negative ");
+            throw new ArithmeticException("Invalid argument");
         try {
             int f = x.intValueExact();
         } catch (ArithmeticException ex){
@@ -97,38 +96,47 @@ public class Mathcore {
         }
         return result;
     }
-    public static BigDecimal exp(BigDecimal x){
-        int f =0;
-        while ((x.abs()).compareTo(BigDecimal.TEN.pow(f,mc))<0){
-            f=f+1;
+    public static BigDecimal exp(BigDecimal x) {
+        int b = 0;
+        if (x.compareTo(BigDecimal.ZERO)==0){
+            return BigDecimal.ONE;
         }
-        int b=f;
-        BigDecimal a= new BigDecimal(String.valueOf(x.divide(BigDecimal.TEN.pow(b,mc))));
-        BigDecimal r= BigDecimal.ZERO;
-        BigDecimal k= BigDecimal.ZERO;
+        while ((x.abs()).compareTo(BigDecimal.TEN.pow(b,mc))<0){
+            b++;
+        }
+
+        BigDecimal a = new BigDecimal(String.valueOf(x.divide(BigDecimal.TEN.pow(b,mc))));
+        BigDecimal r = BigDecimal.ZERO;
+        BigDecimal k = BigDecimal.ZERO;
         while (new BigDecimal(E,mc).divide(fak(k.add(BigDecimal.ONE)),mc).compareTo(epsilon)>=0){
-            r=r.add((a.pow(f,mc)).divide(fak(k),mc),mc);
+            r=r.add((a.pow(k.intValueExact(),mc)).divide(fak(k),mc),mc);
             k=k.add(BigDecimal.ONE,mc);
-            f=f+1;
         }
         while (b>0){
-            for (int i=0; i<10; i++){
-                r=r.multiply(r,mc);
-            }
-            b=b-1;
+            r.pow(10,mc);
+            b--;
         }
         return r;
     }
-    public static class FakException extends Exception {
-        private String errorMessage;
-        public FakException(String errorMessage) {
-            this.errorMessage=errorMessage;
+    public static BigDecimal ln(BigDecimal x) throws ArithmeticException {
+        if (x.compareTo(BigDecimal.ZERO)<=0) throw new ArithmeticException("Invalid argument");
+        BigDecimal a = x;
+        int w = 0;
+        while (((BigDecimal.ONE.subtract(a,mc).abs()).compareTo(new BigDecimal(0.1)))>=0){
+            a=a.sqrt(mc);
+            w++;
         }
-        @Override
-        public String getMessage(){
-            return errorMessage;
+        BigDecimal r = BigDecimal.ZERO;
+        int k = 0;
+        while(new BigDecimal(1/(180*(2*k+3)*19^(2*k+1))).compareTo(epsilon)>=0){
+            r=r.add(new BigDecimal(2/(2*k+1)).multiply((a.subtract(BigDecimal.ONE,mc).divide(a.add(BigDecimal.ONE,mc))).pow(2*k+1,mc)),mc);
+            k++;
         }
+        while (w>0){
+            r=r.multiply(new BigDecimal(2),mc);
+            w--;
+        }
+        return r;
     }
-
 }
 
