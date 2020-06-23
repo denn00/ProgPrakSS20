@@ -46,18 +46,22 @@ public class Postfix {
                 } catch (ArithmeticException e){
                     return e.getMessage();
                 }
+            } else if (s.equals("sin")){
+                stack.push(sin(stack.pop()));
+            } else if (s.equals("cos")){
+                stack.push(cos(stack.pop()));
+            } else if (s.equals("tan")) {
+                try {
+                    stack.push(tan(stack.pop()));
+                } catch (ArithmeticException e){
+                    return e.getMessage();
+                }
             }
         }
         return (stack.pop().round(mc_out)).toString();
     }
     public static boolean isNumber(String string) {
         try {
-            if(string.equals("e")){
-                string = E;
-            }
-            if(string.equals("pi")){
-                string = PI;
-            }
             BigDecimal test = new BigDecimal(string,mc);
             return true;
         } catch (NumberFormatException ex) {

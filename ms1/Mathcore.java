@@ -122,21 +122,46 @@ public class Mathcore {
         if (x.compareTo(BigDecimal.ZERO)<=0) throw new ArithmeticException("Invalid argument");
         BigDecimal a = x;
         int w = 0;
-        while (((BigDecimal.ONE.subtract(a,mc).abs()).compareTo(new BigDecimal(0.1)))>=0){
+        while ((((BigDecimal.ONE.subtract(a,mc)).abs()).compareTo(new BigDecimal(0.1,mc)))>=0){
             a=a.sqrt(mc);
             w++;
         }
         BigDecimal r = BigDecimal.ZERO;
         int k = 0;
-        while(new BigDecimal(1/(180*(2*k+3)*19^(2*k+1))).compareTo(epsilon)>=0){
-            r=r.add(new BigDecimal(2/(2*k+1)).multiply((a.subtract(BigDecimal.ONE,mc).divide(a.add(BigDecimal.ONE,mc))).pow(2*k+1,mc)),mc);
+        while(new BigDecimal(1/(180*(2*k+3)*Math.pow(19,2*k+1)),mc).compareTo(epsilon)>=0){
+            r=r.add(((new BigDecimal(2/(2*k+1),mc)).multiply(((a.subtract(BigDecimal.ONE,mc)).divide(a.add(BigDecimal.ONE,mc))).pow(2*k+1,mc),mc)),mc);
             k++;
         }
         while (w>0){
-            r=r.multiply(new BigDecimal(2),mc);
+            r.multiply(new BigDecimal(2),mc);
             w--;
         }
         return r;
+
     }
+    public static BigDecimal sin(BigDecimal x) {
+        BigDecimal a = x.remainder(new BigDecimal(2).multiply(new BigDecimal(PI), mc), mc);
+        if (a.compareTo(new BigDecimal(PI, mc))>0 && a.compareTo(new BigDecimal(2).multiply(new BigDecimal(PI), mc))<0) {
+            a.subtract(new BigDecimal(2).multiply(new BigDecimal(PI), mc));
+        } else if (a.compareTo(new BigDecimal(PI, mc))==0){
+            return BigDecimal.ZERO;
+        }
+        BigDecimal r = BigDecimal.ZERO;
+        int k=0;
+        BigDecimal m = (BigDecimal.ONE).negate(mc);
+        while (((new BigDecimal(PI, mc).pow(2*k+3,mc)).divide(fak(new BigDecimal(2*k+3)),mc)).compareTo(epsilon)>=0){
+            r=r.add((m.pow(k,mc)).multiply(((a.pow(2*k+1,mc)).divide(fak(new BigDecimal(2*k+1)),mc)),mc));
+            k++;
+        }
+        return r;
+    }
+    public static BigDecimal cos(BigDecimal x){
+        return sin((new BigDecimal(PI,mc).divide(new BigDecimal(2),mc)).subtract(x,mc));
+    }
+    public static BigDecimal tan(BigDecimal x) {
+        if (cos(x).compareTo(BigDecimal.ZERO)==0) throw new ArithmeticException("Cosinus ist negativ");
+        return sin(x).divide(cos(x),mc);
+    }
+
 }
 
