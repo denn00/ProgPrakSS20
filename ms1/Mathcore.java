@@ -128,12 +128,12 @@ public class Mathcore {
         }
         BigDecimal r = BigDecimal.ZERO;
         int k = 0;
-        while(new BigDecimal(1/(180*(2*k+3)*Math.pow(19,2*k+1)),mc).compareTo(epsilon)>=0){
-            r=r.add(((new BigDecimal(2/(2*k+1),mc)).multiply(((a.subtract(BigDecimal.ONE,mc)).divide(a.add(BigDecimal.ONE,mc))).pow(2*k+1,mc),mc)),mc);
+        while(new BigDecimal(1/(180*(2*k+3)*Math.pow(19, 2*k+1))).compareTo(epsilon)>=0){
+            r=r.add(new BigDecimal(2d/(2d*k+1d)).multiply(((a.subtract(BigDecimal.ONE,mc)).divide(a.add(BigDecimal.ONE,mc),mc)).pow(2*k+1,mc),mc),mc);
             k++;
         }
         while (w>0){
-            r.multiply(new BigDecimal(2),mc);
+            r=r.multiply(new BigDecimal(2),mc);
             w--;
         }
         return r;
