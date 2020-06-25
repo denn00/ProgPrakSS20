@@ -101,19 +101,19 @@ public class Mathcore {
         if (x.compareTo(BigDecimal.ZERO)==0){
             return BigDecimal.ONE;
         }
-        while ((x.abs()).compareTo(BigDecimal.TEN.pow(b,mc))<0){
+        while ((x.abs()).compareTo(BigDecimal.TEN.pow(b,mc))>=0){
             b++;
         }
 
-        BigDecimal a = new BigDecimal(String.valueOf(x.divide(BigDecimal.TEN.pow(b,mc))));
+        BigDecimal a = x.divide(BigDecimal.TEN.pow(b,mc));
         BigDecimal r = BigDecimal.ZERO;
         BigDecimal k = BigDecimal.ZERO;
-        while (new BigDecimal(E,mc).divide(fak(k.add(BigDecimal.ONE)),mc).compareTo(epsilon)>=0){
+        while (new BigDecimal(E).divide(fak(k.add(BigDecimal.ONE,mc)),mc).compareTo(epsilon)>=0){
             r=r.add((a.pow(k.intValueExact(),mc)).divide(fak(k),mc),mc);
             k=k.add(BigDecimal.ONE,mc);
         }
         while (b>0){
-            r.pow(10,mc);
+            r=r.pow(10,mc);
             b--;
         }
         return r;
@@ -127,17 +127,38 @@ public class Mathcore {
             w++;
         }
         BigDecimal r = BigDecimal.ZERO;
-        int k = 0;
-        while(new BigDecimal(1/(180*(2*k+3)*Math.pow(19, 2*k+1))).compareTo(epsilon)>=0){
-            r=r.add(new BigDecimal(2d/(2d*k+1d)).multiply(((a.subtract(BigDecimal.ONE,mc)).divide(a.add(BigDecimal.ONE,mc),mc)).pow(2*k+1,mc),mc),mc);
-            k++;
+        BigDecimal k = BigDecimal.ZERO;
+        BigDecimal two = BigDecimal.ONE.multiply(BigDecimal.valueOf(2),mc);
+        BigDecimal nenner1 = new BigDecimal(180,mc);
+        BigDecimal nenner2 = new BigDecimal(String.valueOf((two.multiply(k,mc)).add(new BigDecimal(3),mc)));
+        BigDecimal nenner3 = new BigDecimal(19, mc).pow(2*k.intValueExact()+1,mc);
+        while(BigDecimal.ONE.divide(((nenner1.multiply(nenner2,mc)).multiply(nenner3,mc)),mc).compareTo(epsilon)>=0){
+            r=r.add(new BigDecimal(String.valueOf(two.divide((two.multiply(k,mc)).add(BigDecimal.ONE,mc),mc))).multiply(((a.subtract(BigDecimal.ONE,mc)).divide(a.add(BigDecimal.ONE,mc),mc)).pow(2*k.intValueExact()+1,mc),mc),mc);
+            k=k.add(BigDecimal.ONE,mc);
+            nenner3 = new BigDecimal(19, mc).pow(2*k.intValueExact()+1,mc);
         }
         while (w>0){
-            r=r.multiply(new BigDecimal(2),mc);
+            r=r.multiply(two,mc);
             w--;
         }
         return r;
-
+    }
+    public static BigDecimal pot(BigDecimal a, BigDecimal b) {
+        if (b.compareTo(BigDecimal.ZERO) < 0)
+            throw new ArithmeticException("Cannot power negative");
+        else if (a.compareTo(BigDecimal.ZERO) == 0)
+            return BigDecimal.ZERO;
+        BigDecimal result = exp(a.multiply(ln(b),mc));
+        return result;
+    }
+    public static BigDecimal root(BigDecimal a, BigDecimal b) {
+        if (a.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Die Wurzelfunktion erlaubt nur Zahlen >= 0 als Radikand");
+        }
+        if (b.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Die Wurzelfunktion erlaubt nur Zahlen >0 als Wurzelexponent");
+        }
+        return pot(b,BigDecimal.ONE.divide(a, mc));
     }
     public static BigDecimal sin(BigDecimal x) {
         BigDecimal a = x.remainder(new BigDecimal(2).multiply(new BigDecimal(PI), mc), mc);

@@ -20,6 +20,10 @@ public class Postfix {
                 stack.push((new BigDecimal(E, mc)));
             } else if (s.equals("pi")) {
                 stack.push((new BigDecimal(PI, mc)));
+            } else if (s.equals("-e")) {
+                stack.push((new BigDecimal(E, mc)).negate());
+            } else if (s.equals("-pi")) {
+                stack.push((new BigDecimal(PI, mc)).negate());
             } else if (s.equals("+")) {
                 stack.push(add(stack.pop(), stack.pop()));
             } else if (s.equals("-")) {
@@ -40,10 +44,22 @@ public class Postfix {
                 }
             } else if (s.equals("exp")){
                 stack.push(exp(stack.pop()));
-            } else if (s.equals("ln")){
-                try{
+            } else if (s.equals("ln")) {
+                try {
                     stack.push(ln(stack.pop()));
-                } catch (ArithmeticException e){
+                } catch (ArithmeticException e) {
+                    return e.getMessage();
+                }
+            } else if (s.equals("^")) {
+                try {
+                    stack.push(pot(stack.pop(), stack.pop()));
+                } catch (ArithmeticException e) {
+                    return e.getMessage();
+                }
+            } else if (s.equals("root")){
+                try {
+                    stack.push(root(stack.pop(),stack.pop()));
+                } catch (IllegalArgumentException e){
                     return e.getMessage();
                 }
             } else if (s.equals("sin")){
