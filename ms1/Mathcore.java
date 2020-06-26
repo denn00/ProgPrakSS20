@@ -116,7 +116,7 @@ public class Mathcore {
             b++;
         }
 
-        BigDecimal a = x.divide(BigDecimal.TEN.pow(b,mc));
+        BigDecimal a = x.divide(BigDecimal.TEN.pow(b,mc),mc);
         BigDecimal r = BigDecimal.ZERO;
         BigDecimal k = BigDecimal.ZERO;
         while (new BigDecimal(E).divide(fak(k.add(BigDecimal.ONE,mc)),mc).compareTo(epsilon)>=0){
@@ -136,7 +136,7 @@ public class Mathcore {
         if (x.compareTo(BigDecimal.ZERO)<=0) throw new ArithmeticException("Invalid argument");
         BigDecimal a = x;
         int w = 0;
-        while ((((BigDecimal.ONE.subtract(a,mc)).abs()).compareTo(new BigDecimal(0.1,mc)))>=0){
+        while ((((BigDecimal.ONE.subtract(a,mc)).abs()).compareTo(new BigDecimal("0.1",mc)))>=0){
             a=a.sqrt(mc);
             w++;
         }
@@ -162,9 +162,9 @@ public class Mathcore {
         return ln(a).divide(ln(BigDecimal.TEN), mc);
     }
 
-    public static BigDecimal log(BigDecimal a, BigDecimal b) throws Exception {
+    public static BigDecimal log(BigDecimal a, BigDecimal b) {
         if (b.compareTo(BigDecimal.ZERO) <= 0 || b.compareTo(BigDecimal.ONE) == 0) {
-            throw new IllegalArgumentException("Ungültige Basis für log");
+            throw new IllegalArgumentException("Ungultige Basis fur log");
         }
         return ln(a).divide(ln(b), mc);
     }
@@ -176,8 +176,7 @@ public class Mathcore {
             throw new ArithmeticException("Cannot power negative");
         if (a.compareTo(BigDecimal.ZERO) == 0)
             return BigDecimal.ONE;
-        BigDecimal result = exp(a.multiply(ln(b),mc));
-        return result;
+        return exp(a.multiply(ln(b),mc));
     }
 
     /**********Wurzel**********/
@@ -201,7 +200,7 @@ public class Mathcore {
     public static BigDecimal sin(BigDecimal x) {
         BigDecimal a = x.remainder(new BigDecimal(2).multiply(new BigDecimal(PI), mc), mc);
         if (a.compareTo(new BigDecimal(PI, mc))>0 && a.compareTo(new BigDecimal(2).multiply(new BigDecimal(PI), mc))<0) {
-            a.subtract(new BigDecimal(2).multiply(new BigDecimal(PI), mc));
+            a=a.subtract(new BigDecimal(2).multiply(new BigDecimal(PI), mc));
         } else if (a.compareTo(new BigDecimal(PI, mc))==0){
             return BigDecimal.ZERO;
         }

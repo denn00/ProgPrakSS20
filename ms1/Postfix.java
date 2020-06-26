@@ -133,8 +133,7 @@ public class Postfix {
         }
         if (tok.done() && stack.size()!=1) {
             stack.clear();
-            String s = "Ausdruck ist fehlerhaft";
-            return s;
+            return "Ausdruck ist fehlerhaft";
         }
         return (stack.pop().round(mc_out)).toString();
     }
