@@ -85,8 +85,7 @@ public class Mathcore {
 
     public static BigDecimal div(BigDecimal x, BigDecimal y) throws ArithmeticException {
         if (y.compareTo(BigDecimal.ZERO)==0) throw new ArithmeticException("Division by zero");
-        BigDecimal divide = y.divide(x, mc);
-        return divide;
+        return y.divide(x, mc);
     }
 
     /**********Fakultaet**********/
@@ -105,6 +104,7 @@ public class Mathcore {
         }
         return result;
     }
+
     /**********Exponentialfunktion**********/
 
     public static BigDecimal exp(BigDecimal x) {
@@ -179,6 +179,7 @@ public class Mathcore {
         BigDecimal result = exp(a.multiply(ln(b),mc));
         return result;
     }
+
     /**********Wurzel**********/
 
     public static BigDecimal sqrt(BigDecimal a){
@@ -194,6 +195,7 @@ public class Mathcore {
         }
         return pot(BigDecimal.ONE.divide(b, mc),a);
     }
+    
     /**********Trigonometrische Funktionen**********/
 
     public static BigDecimal sin(BigDecimal x) {
@@ -221,6 +223,5 @@ public class Mathcore {
         if (cos(x).compareTo(BigDecimal.ZERO)==0) throw new ArithmeticException("Cosinus ist negativ");
         return sin(x).divide(cos(x),mc);
     }
-
 }
 

@@ -42,29 +42,29 @@ public class GUI implements ActionListener,ListSelectionListener,FocusListener {
         new GUI();
     }
 
-        public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) {
         String result = null;
         try {
             result=Postfix.eval(input.getText());
             } catch (Exception ex) {
             status.setText(ex.getMessage());
-            }
-            if (result != null) {
-                verlauf.insertElementAt(input.getText(), 0);
-                input.setText(result);
-                input.setCaretPosition(0);
-                status.setText("");
-             }
+        }
+        if (result != null) {
+            verlauf.insertElementAt(input.getText(), 0);
+            input.setText(result);
+            input.setCaretPosition(0);
+            status.setText("");
+        }
     }
     public void valueChanged(ListSelectionEvent e) {
-         if (!e.getValueIsAdjusting() && liste.getSelectedValue() != null) {
-             input.setText(liste.getSelectedValue().toString());
-             }
+        if (!e.getValueIsAdjusting() && liste.getSelectedValue() != null) {
+            input.setText(liste.getSelectedValue().toString());
+        }
     }
     public void focusGained(FocusEvent e) {
-         return;
+        return;
     }
     public void focusLost(FocusEvent e) {
-         liste.clearSelection();
+        liste.clearSelection();
     }
  }
