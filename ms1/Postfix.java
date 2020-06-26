@@ -2,6 +2,7 @@ package ms1;
 
 import java.math.BigDecimal;
 import ms0.a1.Tokenizer;
+import java.util.EmptyStackException;
 import java.util.Stack;
 import static ms1.Mathcore.*;
 import java.lang.Exception;
@@ -25,42 +26,77 @@ public class Postfix {
             } else if (s.equals("-pi")) {
                 stack.push((new BigDecimal(PI, mc)).negate());
             } else if (s.equals("+")) {
-                stack.push(add(stack.pop(), stack.pop()));
+                try {
+                    stack.push(add(stack.pop(), stack.pop()));
+                } catch (EmptyStackException e){
+                    String s1="Kein sinnvoller Ausdruck";
+                    return s1;
+                }
             } else if (s.equals("-")) {
-                stack.push(sub((stack.pop()), stack.pop()));
+                try {
+                    stack.push(sub((stack.pop()), stack.pop()));
+                } catch (EmptyStackException e) {
+                    String s1 = "Kein sinnvoller Ausdruck";
+                    return s1;
+                }
             } else if (s.equals("*")) {
-                stack.push(mul((stack.pop()), stack.pop()));
+                try {
+                    stack.push(mul((stack.pop()), stack.pop()));
+                } catch (EmptyStackException e) {
+                    String s1 = "Kein sinnvoller Ausdruck";
+                    return s1;
+                }
             } else if (s.equals("/")) {
                 try {
                     stack.push(div(stack.pop(), stack.pop()));
                 } catch (ArithmeticException ex) {
                     return ex.getMessage();
+                } catch (EmptyStackException e) {
+                    String s1 = "Kein sinnvoller Ausdruck";
+                    return s1;
                 }
             } else if (s.equals("!")) {
                 try {
                     stack.push(fak(stack.pop()));
-                } catch (Exception e) {
+                } catch (ArithmeticException e) {
                     return e.getMessage();
+                } catch (EmptyStackException e) {
+                    String s1 = "Kein sinnvoller Ausdruck";
+                    return s1;
                 }
             } else if (s.equals("exp")){
-                stack.push(exp(stack.pop()));
+                try {
+                    stack.push(exp(stack.pop()));
+                } catch (EmptyStackException e) {
+                    String s1 = "Kein sinnvoller Ausdruck";
+                    return s1;
+                }
             } else if (s.equals("ln")) {
                 try {
                     stack.push(ln(stack.pop()));
                 } catch (ArithmeticException e) {
                     return e.getMessage();
+                } catch (EmptyStackException e) {
+                    String s1 = "Kein sinnvoller Ausdruck";
+                    return s1;
                 }
-            } else if (s.equals("lg")) {
+                } else if (s.equals("lg")) {
                 try {
                     stack.push(lg(stack.pop()));
                 } catch (ArithmeticException e) {
                     return e.getMessage();
+                } catch (EmptyStackException e) {
+                    String s1 = "Kein sinnvoller Ausdruck";
+                    return s1;
                 }
             } else if (s.equals("log")){
                     try {
                         stack.push(log(stack.pop(),stack.pop()));
                     } catch (ArithmeticException e) {
                         return e.getMessage();
+                    } catch (EmptyStackException e) {
+                        String s1 = "Kein sinnvoller Ausdruck";
+                        return s1;
                     }
             } else if (s.equals("^")) {
                 try {
@@ -73,29 +109,50 @@ public class Postfix {
                     stack.push(root(stack.pop(), stack.pop()));
                 } catch (IllegalArgumentException e) {
                     return e.getMessage();
+                } catch (EmptyStackException e) {
+                    String s1 = "Kein sinnvoller Ausdruck";
+                    return s1;
                 }
             } else if(s.equals("sqrt")){
-                stack.push(sqrt(stack.pop()));
+                try {
+                    stack.push(sqrt(stack.pop()));
+                } catch (EmptyStackException e) {
+                    String s1 = "Kein sinnvoller Ausdruck";
+                    return s1;
+                }
             } else if (s.equals("sin")){
-                stack.push(sin(stack.pop()));
+                try{
+                    stack.push(sin(stack.pop()));
+                } catch (EmptyStackException e) {
+                    String s1 = "Kein sinnvoller Ausdruck";
+                    return s1;
+                }
             } else if (s.equals("cos")){
-                stack.push(cos(stack.pop()));
+                try{
+                    stack.push(cos(stack.pop()));
+                } catch (EmptyStackException e) {
+                    String s1 = "Kein sinnvoller Ausdruck";
+                    return s1;
+                }
             } else if (s.equals("tan")) {
                 try {
                     stack.push(tan(stack.pop()));
                 } catch (ArithmeticException e){
                     return e.getMessage();
+                } catch (EmptyStackException e) {
+                    String s1 = "Kein sinnvoller Ausdruck";
+                    return s1;
                 }
             }
         }
         if (tok.done() && stack.size()!=1) {
+            stack.clear();
             String s = "Ausdruck ist fehlerhaft";
             return s;
         }
         return (stack.pop().round(mc_out)).toString();
     }
-
-
+    /*Hilfsmethode*/
     public static boolean isNumber(String string) {
         try {
             BigDecimal test = new BigDecimal(string,mc);
