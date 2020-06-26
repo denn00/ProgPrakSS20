@@ -10,7 +10,7 @@ public class Postfix {
 
     static Stack<BigDecimal> stack = new Stack();
 
-    public static String eval(String eingabe) {
+    public static String eval(String eingabe) throws Exception {
         Tokenizer tok = new Tokenizer(eingabe);
         while (!tok.done()) {
             String s = tok.next();
@@ -50,18 +50,32 @@ public class Postfix {
                 } catch (ArithmeticException e) {
                     return e.getMessage();
                 }
+            } else if (s.equals("lg")) {
+                try {
+                    stack.push(lg(stack.pop()));
+                } catch (ArithmeticException e) {
+                    return e.getMessage();
+                }
+            } else if (s.equals("log")){
+                    try {
+                        stack.push(log(stack.pop(),stack.pop()));
+                    } catch (ArithmeticException e) {
+                        return e.getMessage();
+                    }
             } else if (s.equals("^")) {
                 try {
                     stack.push(pot(stack.pop(), stack.pop()));
                 } catch (ArithmeticException e) {
                     return e.getMessage();
                 }
-            } else if (s.equals("root")){
+            } else if (s.equals("root")) {
                 try {
-                    stack.push(root(stack.pop(),stack.pop()));
-                } catch (IllegalArgumentException e){
+                    stack.push(root(stack.pop(), stack.pop()));
+                } catch (IllegalArgumentException e) {
                     return e.getMessage();
                 }
+            } else if(s.equals("sqrt")){
+                stack.push(sqrt(stack.pop()));
             } else if (s.equals("sin")){
                 stack.push(sin(stack.pop()));
             } else if (s.equals("cos")){
@@ -74,8 +88,14 @@ public class Postfix {
                 }
             }
         }
+        if (tok.done() && stack.size()!=1) {
+            String s = "Ausdruck ist fehlerhaft";
+            return s;
+        }
         return (stack.pop().round(mc_out)).toString();
     }
+
+
     public static boolean isNumber(String string) {
         try {
             BigDecimal test = new BigDecimal(string,mc);

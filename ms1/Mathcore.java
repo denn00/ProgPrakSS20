@@ -62,26 +62,34 @@ public class Mathcore {
             "52111513683506275260232648472870392076431005958411661205452970302364725492966693" +
             "81151373227536450988890313602057248176585118063036442812314965507047510254465011" +
             "727211555194866850800368532281831521960037356252794495158284188294787610852639814";
+    /**********Elementare Rechenoperationen**********/
+
     public static BigDecimal add(BigDecimal x, BigDecimal y) {
         BigDecimal result = x;
         result = result.add(y, mc);
         return result;
     }
+
     public static BigDecimal sub(BigDecimal x, BigDecimal y) {
         BigDecimal result = y;
         result = result.subtract(x, mc);
         return result;
     }
+
     public static BigDecimal mul(BigDecimal x, BigDecimal y) {
         BigDecimal result = x;
         result = result.multiply(y, mc);
         return result;
     }
+
     public static BigDecimal div(BigDecimal x, BigDecimal y) throws ArithmeticException {
         if (y.compareTo(BigDecimal.ZERO)==0) throw new ArithmeticException("Division by zero");
         BigDecimal divide = y.divide(x, mc);
         return divide;
     }
+
+    /**********Fakultaet**********/
+
     public static BigDecimal fak(BigDecimal x) throws ArithmeticException {
         if (x.compareTo(BigDecimal.ZERO) < 0)
             throw new ArithmeticException("Invalid argument");
@@ -96,6 +104,8 @@ public class Mathcore {
         }
         return result;
     }
+    /**********Exponentialfunktion**********/
+
     public static BigDecimal exp(BigDecimal x) {
         int b = 0;
         if (x.compareTo(BigDecimal.ZERO)==0){
@@ -118,6 +128,9 @@ public class Mathcore {
         }
         return r;
     }
+
+    /**************Logarithmen**********/
+
     public static BigDecimal ln(BigDecimal x) throws ArithmeticException {
         if (x.compareTo(BigDecimal.ZERO)<=0) throw new ArithmeticException("Invalid argument");
         BigDecimal a = x;
@@ -143,23 +156,45 @@ public class Mathcore {
         }
         return r;
     }
+
+    public static BigDecimal lg(BigDecimal a) {
+        return ln(a).divide(ln(BigDecimal.TEN), mc);
+    }
+
+    public static BigDecimal log(BigDecimal a, BigDecimal b) throws Exception {
+        if (b.compareTo(BigDecimal.ZERO) <= 0 || b.compareTo(BigDecimal.ONE) == 0) {
+            throw new IllegalArgumentException("Ungültige Basis für log");
+        }
+        return ln(a).divide(ln(b), mc);
+    }
+
+    /**********Potenzierung**********/
+
     public static BigDecimal pot(BigDecimal a, BigDecimal b) {
-        if (b.compareTo(BigDecimal.ZERO) < 0)
+        if (b.compareTo(BigDecimal.ZERO) <= 0 || a.compareTo(BigDecimal.ZERO) < 0)
             throw new ArithmeticException("Cannot power negative");
-        else if (a.compareTo(BigDecimal.ZERO) == 0)
-            return BigDecimal.ZERO;
+        if (a.compareTo(BigDecimal.ZERO) == 0)
+            return BigDecimal.ONE;
         BigDecimal result = exp(a.multiply(ln(b),mc));
         return result;
     }
-    public static BigDecimal root(BigDecimal a, BigDecimal b) {
+    /**********Wurzel**********/
+
+    public static BigDecimal sqrt(BigDecimal a){
+        return a.sqrt(mc);
+    }
+
+    public static BigDecimal root(BigDecimal a, BigDecimal b) throws IllegalArgumentException {
         if (a.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Die Wurzelfunktion erlaubt nur Zahlen >= 0 als Radikand");
+            throw new IllegalArgumentException("Radikand <=0");
         }
         if (b.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Die Wurzelfunktion erlaubt nur Zahlen >0 als Wurzelexponent");
+            throw new IllegalArgumentException("Wurzelexponent <= 0");
         }
-        return pot(b,BigDecimal.ONE.divide(a, mc));
+        return pot(BigDecimal.ONE.divide(b, mc),a);
     }
+    /**********Trigonometrische Funktionen**********/
+
     public static BigDecimal sin(BigDecimal x) {
         BigDecimal a = x.remainder(new BigDecimal(2).multiply(new BigDecimal(PI), mc), mc);
         if (a.compareTo(new BigDecimal(PI, mc))>0 && a.compareTo(new BigDecimal(2).multiply(new BigDecimal(PI), mc))<0) {
@@ -176,9 +211,11 @@ public class Mathcore {
         }
         return r;
     }
+
     public static BigDecimal cos(BigDecimal x){
         return sin((new BigDecimal(PI,mc).divide(new BigDecimal(2),mc)).subtract(x,mc));
     }
+
     public static BigDecimal tan(BigDecimal x) {
         if (cos(x).compareTo(BigDecimal.ZERO)==0) throw new ArithmeticException("Cosinus ist negativ");
         return sin(x).divide(cos(x),mc);
