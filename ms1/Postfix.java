@@ -82,13 +82,13 @@ public class Postfix {
                     return "Kein sinnvoller Ausdruck";
                 }
             } else if (s.equals("log")){
-                    try {
-                        stack.push(log(stack.pop(),stack.pop()));
-                    } catch (ArithmeticException e) {
-                        return e.getMessage();
-                    } catch (EmptyStackException e) {
-                        return "Kein sinnvoller Ausdruck";
-                    }
+                try {
+                    stack.push(log(stack.pop(),stack.pop()));
+                } catch (ArithmeticException e) {
+                    return e.getMessage();
+                } catch (EmptyStackException e) {
+                    return "Kein sinnvoller Ausdruck";
+                }
             } else if (s.equals("^")) {
                 try {
                     stack.push(pot(stack.pop(), stack.pop()));

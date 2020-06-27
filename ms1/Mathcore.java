@@ -115,12 +115,13 @@ public class Mathcore {
         while ((x.abs()).compareTo(BigDecimal.TEN.pow(b,mc))>=0){
             b++;
         }
-
         BigDecimal a = x.divide(BigDecimal.TEN.pow(b,mc),mc);
         BigDecimal r = BigDecimal.ZERO;
         BigDecimal k = BigDecimal.ZERO;
-        while (new BigDecimal(E).divide(fak(k.add(BigDecimal.ONE,mc)),mc).compareTo(epsilon)>=0){
-            r=r.add((a.pow(k.intValueExact(),mc)).divide(fak(k),mc),mc);
+        BigDecimal fak = BigDecimal.ONE;
+        while (new BigDecimal(E).divide(fak,mc).compareTo(epsilon)>=0){
+            r=r.add(a.pow(k.intValueExact(),mc).divide(fak.divide((k.add(BigDecimal.ONE,mc)),mc),mc),mc);
+            fak = fak.multiply((k.add(new BigDecimal(2),mc)),mc);
             k=k.add(BigDecimal.ONE,mc);
         }
         while (b>0){
@@ -187,7 +188,7 @@ public class Mathcore {
 
     public static BigDecimal root(BigDecimal a, BigDecimal b) throws IllegalArgumentException {
         if (a.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Radikand <=0");
+            throw new IllegalArgumentException("Radikand < 0");
         }
         if (b.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Wurzelexponent <= 0");
